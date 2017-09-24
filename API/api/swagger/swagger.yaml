@@ -1,0 +1,109 @@
+parameters:
+  page: {name: page, in: query, type: integer, description: Page number of the results,
+    minimum: 1, default: 1}
+  size: {name: size, in: query, type: integer, description: Number of documents to
+      be returned per page, minimum: 1, maximum: 1000, default: 10}
+paths:
+  /trips:
+    x-swagger-router-controller: trips
+    get:
+      tags: [Trips]
+      summary: List all trips
+      description: Returns trips data for dashboard
+      operationId: listAll
+      parameters:
+      - {$ref: '#/parameters/page'}
+      - {$ref: '#/parameters/size'}
+      responses:
+        '200':
+          description: Success
+          schema: {$ref: '#/definitions/TripsResponse'}
+        default:
+          description: Error
+          schema: {$ref: '#/definitions/ErrorResponse'}
+    post:
+      tags: [Trips]
+      summary: Request the trip
+      description: API for customer app to request the trip
+      operationId: request
+      parameters:
+      - name: body
+        in: body
+        required: true
+        schema: {$ref: '#/definitions/TripRequest'}
+      responses:
+        '200':
+          description: Success
+          schema: {$ref: '#/definitions/TripRequestResponse'}
+        default:
+          description: Error
+          schema: {$ref: '#/definitions/ErrorResponse'}
+  /trips/{request_id}:
+    x-swagger-router-controller: trips
+    put:
+      tags: [Trips]
+      summary: Select the trip/request
+      description: API to assign the trip/request to the driver
+      operationId: assign
+      parameters:
+      - {in: path, name: request_id, type: string, required: true, description: Request
+          id}
+      - name: body
+        in: body
+        required: true
+        schema: {$ref: '#/definitions/TripAssignment'}
+      responses:
+        '200':
+          description: Success
+          schema: {$ref: '#/definitions/TripAssignmentResponse'}
+        default:
+          description: Error
+          schema: {$ref: '#/definitions/ErrorResponse'}
+  /swagger: {x-swagger-pipe: swagger_raw}
+definitions:
+  TripsResponse:
+    required: [data]
+    properties:
+      data:
+        type: array
+        items: {$ref: '#/definitions/Trip'}
+  TripRequestResponse:
+    required: [message]
+    properties:
+      message: {type: string}
+  TripAssignmentResponse:
+    required: [message]
+    properties:
+      message: {type: string}
+  ErrorResponse:
+    required: [message]
+    properties:
+      message: {type: string}
+  Trip:
+    type: object
+    properties:
+      request_id: {type: string, description: Request Id, example: 123}
+      customer_id: {type: string, description: Customer Id, example: 123}
+      driver_id: {type: string, description: Driver Id, example: 123}
+      timestamp: {type: integer, description: Time of the request, example: 389248291238}
+      pickup: {type: integer, description: Pick-up time of the request, example: 389248291238}
+      status:
+        type: string
+        description: Trip/Request status
+        enum: [waiting, ongoing, completed]
+        example: waiting
+  TripRequest:
+    required: [customer_id]
+    properties:
+      customer_id: {type: string, description: Customer Id}
+  TripAssignment:
+    required: [driver_id]
+    properties:
+      driver_id: {type: string, description: Driver Id}
+swagger: '2.0'
+info: {version: 0.0.1, title: Ola Queuing System API}
+host: localhost:8080
+basePath: /api/v0
+schemes: [http, https]
+consumes: [application/json]
+produces: [application/json]

@@ -1,0 +1,17 @@
+parameters:
+  # Pagination parameters
+  page:
+    name: page
+    in: query
+    type: integer
+    description: Page number of the results
+    minimum: 1
+    default: 1
+  size:
+    name: size
+    in: query
+    type: integer
+    description: Number of documents to be returned per page
+    minimum: 1
+    maximum: 1000
+    default: 10

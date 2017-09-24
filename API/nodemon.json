@@ -1,0 +1,22 @@
+{
+  "restartable": "rs",
+  "ignore": [
+    ".DS_Store",
+    ".git",
+    "node_modules",
+    "api/swagger"
+  ],
+  "verbose": false,
+  "watch": [
+    "api",
+    "config",
+    "SERVICES"
+  ],
+  "ext": "js json yaml",
+  "events": {
+    "restart": "node scripts/generate.js"
+  },
+  "env": {
+    "NODE_ENV": "dev"
+  }
+}

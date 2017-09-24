@@ -1,0 +1,87 @@
+paths:
+  /trips:
+    # binds a127 app logic to a route
+    x-swagger-router-controller: trips
+    get:
+      tags:
+        - Trips
+      summary: List all trips
+      description: Returns trips data for dashboard
+      # used as the method name of the controller
+      operationId: listAll
+      parameters:
+        # Meta
+        - $ref: "#/parameters/page"
+        - $ref: "#/parameters/size"
+      responses:
+        "200":
+          description: Success
+          schema:
+            # a pointer to a definition
+            $ref: "#/definitions/TripsResponse"
+        # responses may fall through to errors
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+    post:
+      tags:
+        - Trips
+      summary: Request the trip
+      description: API for customer app to request the trip
+      # used as the method name of the controller
+      operationId: request
+      parameters:
+        # Body
+        - name: body
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/TripRequest'
+      responses:
+        "200":
+          description: Success
+          schema:
+            # a pointer to a definition
+            $ref: "#/definitions/TripRequestResponse"
+        # responses may fall through to errors
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+  /trips/{request_id}:
+    # binds a127 app logic to a route
+    x-swagger-router-controller: trips
+    put:
+      tags:
+        - Trips
+      summary: Select the trip/request
+      description: API to assign the trip/request to the driver
+      # used as the method name of the controller
+      operationId: assign
+      parameters:
+        # Path
+        - in: path
+          name: request_id
+          type: string
+          required: true
+          description: Request id
+        # Body
+        - name: body
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/TripAssignment'
+      responses:
+        "200":
+          description: Success
+          schema:
+            # a pointer to a definition
+            $ref: "#/definitions/TripAssignmentResponse"
+        # responses may fall through to errors
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+  /swagger:
+    x-swagger-pipe: swagger_raw

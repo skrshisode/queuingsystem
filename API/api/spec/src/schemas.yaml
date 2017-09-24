@@ -1,0 +1,47 @@
+# complex objects have schema definitions
+definitions:
+  Trip:
+    type: object
+    properties:
+      request_id:
+        type: string
+        description: Request Id
+        example: 123
+      customer_id:
+        type: string
+        description: Customer Id
+        example: 123
+      driver_id:
+        type: string
+        description: Driver Id
+        example: 123
+      timestamp:
+        type: integer
+        description: Time of the request
+        example: 389248291238
+      pickup:
+        type: integer
+        description: Pick-up time of the request
+        example: 389248291238
+      status:
+        type: string
+        description: Trip/Request status
+        enum:
+          - waiting
+          - ongoing
+          - completed
+        example: waiting
+  TripRequest:
+    required:
+      - customer_id
+    properties:
+      customer_id:
+        type: string
+        description: Customer Id
+  TripAssignment:
+    required:
+      - driver_id
+    properties:
+      driver_id:
+        type: string
+        description: Driver Id
