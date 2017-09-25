@@ -18,6 +18,7 @@ class Broker extends EventEmitter {
     this.queue = null;
     this.consumer = null;
     this.ex = options.exchange || 'trips';
+    this.isConsumer = options.consumer || false;
 
     amqp
       .connect(url)
@@ -39,26 +40,34 @@ class Broker extends EventEmitter {
       'fanout',
       {durable: false}
     ).then(() => {
-      const self = this;
-      this.channel.assertQueue('', {exclusive: true})
-        .then((q) => {
-          return self.channel.bindQueue(q.queue, 'trips', '').then(() => {
-            return q.queue;
+      if (this.isConsumer) {
+        const self = this;
+        this.channel.assertQueue('', {exclusive: true})
+          .then((q) => {
+            return self.channel.bindQueue(q.queue, 'trips', '').then(() => {
+              return q.queue;
+            });
+          })
+          .then((queue) => {
+            self.consumer = new EventEmitter();
+            self.channel.consume(queue, (message) => {
+              self.consumer.emit(self.ex, message.content.toString());
+            }, {noAck: true});
           });
-        })
-        .then((queue) => {
-          self.consumer = new EventEmitter();
-          self.channel.consume(queue, (message) => {
-            self.consumer.emit(self.ex, message.content.toString());
-          }, {noAck: true});
-        });
+      }
       this.emit('connected');
     });
     this.channel.on('close', this.onChannelClose.bind(this));
   }
 
   publish(message) {
-    this.channel.publish(this.ex, '', new Buffer(JSON.stringify(message)));
+    if (!this.isConsumer) {
+      console.log('Published -> ', message);
+      this.channel.publish(this.ex, '', new Buffer(JSON.stringify(message)));
+    }
+    else {
+      console.log('Consumers not allowed to publish!');
+    }
   }
 
   close() {

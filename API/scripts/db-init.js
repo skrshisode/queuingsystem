@@ -7,7 +7,7 @@ const path = require('path');
 const glob = require('glob-all');
 const mongoose = require('mongoose');
 const DB = {
-  'host': 'localhost',
+  'host': process.env.MONGO_HOST || 'localhost',
   'port': 27017,
   'db': 'ola',
 };
