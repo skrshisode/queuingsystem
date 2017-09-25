@@ -10,7 +10,8 @@
   "watch": [
     "api",
     "config",
-    "SERVICES"
+    "SERVICES",
+    "scripts"
   ],
   "ext": "js json yaml",
   "events": {

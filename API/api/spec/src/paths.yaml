@@ -49,7 +49,7 @@ paths:
           description: Error
           schema:
             $ref: "#/definitions/ErrorResponse"
-  /trips/{request_id}:
+  /trips/{requestId}:
     # binds a127 app logic to a route
     x-swagger-router-controller: trips
     put:
@@ -62,7 +62,7 @@ paths:
       parameters:
         # Path
         - in: path
-          name: request_id
+          name: requestId
           type: string
           required: true
           description: Request id

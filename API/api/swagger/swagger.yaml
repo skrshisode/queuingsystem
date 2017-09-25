@@ -38,7 +38,7 @@ paths:
         default:
           description: Error
           schema: {$ref: '#/definitions/ErrorResponse'}
-  /trips/{request_id}:
+  /trips/{requestId}:
     x-swagger-router-controller: trips
     put:
       tags: [Trips]
@@ -46,7 +46,7 @@ paths:
       description: API to assign the trip/request to the driver
       operationId: assign
       parameters:
-      - {in: path, name: request_id, type: string, required: true, description: Request
+      - {in: path, name: requestId, type: string, required: true, description: Request
           id}
       - name: body
         in: body
@@ -82,24 +82,28 @@ definitions:
   Trip:
     type: object
     properties:
-      request_id: {type: string, description: Request Id, example: 123}
-      customer_id: {type: string, description: Customer Id, example: 123}
-      driver_id: {type: string, description: Driver Id, example: 123}
-      timestamp: {type: integer, description: Time of the request, example: 389248291238}
-      pickup: {type: integer, description: Pick-up time of the request, example: 389248291238}
+      requestId: {type: string, description: Request Id, example: 123}
+      customerId: {type: string, description: Customer Id, example: 123}
+      driverId: {type: string, description: Driver Id, example: 123}
+      createdOn: {type: integer, description: Time of the request, example: 389248291238}
+      pickupOn: {type: integer, description: Pick-up time of the request, example: 389248291238}
       status:
         type: string
         description: Trip/Request status
         enum: [waiting, ongoing, completed]
         example: waiting
   TripRequest:
-    required: [customer_id]
+    required: [customerId]
     properties:
-      customer_id: {type: string, description: Customer Id}
+      customerId: {type: string, description: Customer Id}
   TripAssignment:
-    required: [driver_id]
+    required: [driverId]
     properties:
-      driver_id: {type: string, description: Driver Id}
+      driverId: {type: string, description: Driver Id}
+      action:
+        type: string
+        enum: [pickup, dropoff]
+        description: Action to be taken
 swagger: '2.0'
 info: {version: 0.0.1, title: Ola Queuing System API}
 host: localhost:8080

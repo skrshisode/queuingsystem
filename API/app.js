@@ -1,3 +1,4 @@
+/*global broker*/
 'use strict';
 
 global.Promise = require('bluebird');
@@ -41,12 +42,12 @@ const cors = require('cors');
 const shrinkRay = require('shrink-ray');
 const toobusy = require('toobusy-js');
 const helmet = require('helmet');
-const mongoose = require('mongoose');
 const morgan = require('morgan');
 const swaggerUi = require('swagger-ui-express');
 const swaggerDocument = require('./api/swagger/swagger.json');
 
 app.set('trust proxy', 'loopback');
+require('./scripts/db-init')();
 app.use((req, res, next) => {
   if (toobusy()) {
     return res.status(503).json({
@@ -66,5 +67,5 @@ app.use(shrinkRay());
 const showExplorer = true;
 const options = {};
 const customCss = '#swagger-ui { margin: auto; width: 75% }';
-app.use('/docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument,
+app.use('/api/v0/docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument,
                                         showExplorer, options, customCss));

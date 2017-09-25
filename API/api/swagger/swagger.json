@@ -84,7 +84,7 @@
         }
       }
     },
-    "/trips/{request_id}": {
+    "/trips/{requestId}": {
       "x-swagger-router-controller": "trips",
       "put": {
         "tags": [
@@ -96,7 +96,7 @@
         "parameters": [
           {
             "in": "path",
-            "name": "request_id",
+            "name": "requestId",
             "type": "string",
             "required": true,
             "description": "Request id"
@@ -177,27 +177,27 @@
     "Trip": {
       "type": "object",
       "properties": {
-        "request_id": {
+        "requestId": {
           "type": "string",
           "description": "Request Id",
           "example": 123
         },
-        "customer_id": {
+        "customerId": {
           "type": "string",
           "description": "Customer Id",
           "example": 123
         },
-        "driver_id": {
+        "driverId": {
           "type": "string",
           "description": "Driver Id",
           "example": 123
         },
-        "timestamp": {
+        "createdOn": {
           "type": "integer",
           "description": "Time of the request",
           "example": 389248291238
         },
-        "pickup": {
+        "pickupOn": {
           "type": "integer",
           "description": "Pick-up time of the request",
           "example": 389248291238
@@ -216,10 +216,10 @@
     },
     "TripRequest": {
       "required": [
-        "customer_id"
+        "customerId"
       ],
       "properties": {
-        "customer_id": {
+        "customerId": {
           "type": "string",
           "description": "Customer Id"
         }
@@ -227,12 +227,20 @@
     },
     "TripAssignment": {
       "required": [
-        "driver_id"
+        "driverId"
       ],
       "properties": {
-        "driver_id": {
+        "driverId": {
           "type": "string",
           "description": "Driver Id"
+        },
+        "action": {
+          "type": "string",
+          "enum": [
+            "pickup",
+            "dropoff"
+          ],
+          "description": "Action to be taken"
         }
       }
     }
