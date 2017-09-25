@@ -1,0 +1,59 @@
+version: "3"
+services:
+  api:
+    build: './API'
+    environment:
+      - SERVICE_NAME=api
+      - NODE_ENV=production
+      - MONGO_HOST=mongo
+      - RABBITMQ_HOST=rabbitmq
+    expose:
+    - "8080"
+    restart: "on-failure:3"
+    links:
+      - mongo
+      - rabbitmq
+  mongo:
+    image: mongo:latest
+    environment:
+      - SERVICE_NAME=mongo
+      - NODE_ENV=production
+      - MONGO_DATA_DIR=/data/db
+      - MONGO_LOG_DIR=/dev/null
+    volumes:
+      - ./data/db:/data/db
+    ports:
+      - "27017"
+    command: mongod --smallfiles --logpath=/dev/null # --quiet
+  apps:
+    build: './Apps'
+    environment:
+      - SERVICE_NAME=apps
+      - SERVICE_TAGS=production
+    expose:
+    - "3000"
+    restart: "on-failure:3"
+    links:
+      - rabbitmq
+  rabbitmq:
+      hostname: rabbitmq
+      image: rabbitmq:management
+      ports:
+        - "5672"
+      environment:
+        SERVICE_NAME: message-queue
+        SERVICE_TAGS: production
+        RABBITMQ_DEFAULT_USER: root
+        RABBITMQ_DEFAULT_PASS: root
+      restart: "on-failure:3"
+  nginx:
+    build: './Nginx'
+    ports:
+      - "80:80"
+    environment:
+      SERVICE_NAME: nginx
+      SERVICE_TAGS: production
+    restart: "on-failure:3"
+    links:
+      - api
+      - app
