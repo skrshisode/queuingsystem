@@ -3,13 +3,10 @@ var router = express.Router();
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
-  res.render('index', { title: 'Express' });
+  res.render('index', { title: 'Home' });
 });
 
 router.get('/driver', function(req, res, next) {
-  broker.consumer.on('trips', (msg) => {
-    console.log(msg);
-  });
   res.render('driver', { title: 'Driver' });
 });
 

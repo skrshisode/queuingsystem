@@ -44,6 +44,13 @@ else {
      * Create HTTP server.
      */
     const server = http.createServer(app);
+    const io = require('socket.io')(server);
+    io.on('connection', (socket) => {
+      broker.consumer.on('trips', (message) => {
+        console.log('Emitting ->', message);
+        socket.emit('trips', message);
+      });
+    });
 
     server.listen(port);
     server.on('error', onError);

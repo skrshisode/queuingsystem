@@ -6,3 +6,9 @@ body {
 a {
   color: #00B7FF;
 }
+
+.app {
+  width: 95%;
+  padding: 2.5%;
+  margin: auto;
+}

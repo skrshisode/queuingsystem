@@ -50,6 +50,7 @@ class Broker extends EventEmitter {
           })
           .then((queue) => {
             self.consumer = new EventEmitter();
+            self.consumer.setMaxListeners(20);
             self.channel.consume(queue, (message) => {
               self.consumer.emit(self.ex, message.content.toString());
             }, {noAck: true});

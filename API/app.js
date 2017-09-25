@@ -58,6 +58,15 @@ app.use((req, res, next) => {
     next();
   }
 });
+app.use((req, res, next) => {
+  if (req.method === 'GET') {
+    res.set({
+      'Cache-Control': 'must-revalidate, private',
+      'Expires': 0,
+    });
+  }
+  next();
+});
 app.set('x-powered-by', false);
 app.use(morgan('combined'));
 app.use(cors());

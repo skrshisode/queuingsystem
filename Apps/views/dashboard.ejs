@@ -2,10 +2,76 @@
 <html>
   <head>
     <title><%= title %></title>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
     <link rel='stylesheet' href='/stylesheets/style.css' />
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <!-- Optional theme -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
   </head>
   <body>
     <h1><%= title %></h1>
-    <p>Welcome to <%= title %></p>
+    <p>Welcome to <%= title %> App</p>
+
+    <div class="app">
+      <table class="table" id="table">
+        <thead>
+            <tr>
+                <th>createdOn</th>
+                <th>requestId</th>
+                <th>customerId</th>
+                <th>status</th>
+                <th>pickupOn</th>
+                <th>driverId</th>
+                <th>updatedOn</th>
+            </tr>
+        </thead>
+        <tbody>
+        </tbody>
+      </table>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
+    <!-- Latest compiled and minified JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+    <script src="/socket.io/socket.io.js"></script>
+    <script type="text/javascript">
+      (function() {
+        function getList() {
+          $.ajax({
+            url: 'http://localhost:8080/api/v0/trips/',
+            type: "GET",
+            cache: false,
+            data: {
+              'from': 1,
+              'size': 100
+            },
+            success: function(result){
+              $('#table > tbody').html('');
+              for (var i = 0; i < result.data.length; i++) {
+                  var row = '';
+                  console.log(result.data[i]);
+                  for (var key in result.data[i]) {
+                    if (result.data[i].hasOwnProperty(key)) {
+                      row += '<td>' + result.data[i][key] + '</td>';
+                    }
+                  }
+                  $('#table > tbody').append("<tr>" + row + "</tr>");
+              }
+            }
+          });
+        }
+        getList();
+        var socket = io({transports: ['websocket']});
+        socket.on('trips', function(data){
+          console.log(data);
+          getList();
+        });
+      })();
+    </script>
   </body>
 </html>

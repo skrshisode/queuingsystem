@@ -3,9 +3,58 @@
   <head>
     <title><%= title %></title>
     <link rel='stylesheet' href='/stylesheets/style.css' />
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <!-- Optional theme -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
   </head>
   <body>
     <h1><%= title %></h1>
-    <p>Welcome to <%= title %></p>
+    <p>Welcome to <%= title %> App</p>
+
+    <div class="app">
+      <table class="table" id="table">
+        <thead>
+            <tr>
+                <th>waiting</th>
+                <th>ongoing</th>
+                <th>complete</th>
+            </tr>
+        </thead>
+        <tbody>
+          <tr>
+              <td id="waiting">
+
+              </td>
+              <td id="ongoing">
+                <p>dsvcdsvsdv</p>
+              </td>
+              <td id="complete">
+                <p>dsvcdsvsdv</p>
+              </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
+    <!-- Latest compiled and minified JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+    <script src="/socket.io/socket.io.js"></script>
+    <script type="text/javascript">
+      (function() {
+        var socket = io({transports: ['websocket']});
+        socket.on('trips', function(data){
+          console.log(data);
+          var json = JSON.parse(data);
+          $('#'+json.status).append(
+            '<p>' + new Date(json.createdOn) + '</p>' +
+            '<p>' + json.requestId + '</p>' +
+            '<p>' + json.customerId + '</p>' +
+            '<p>' + json.status + '</p>'
+          );
+        });
+      })();
+    </script>
   </body>
 </html>
