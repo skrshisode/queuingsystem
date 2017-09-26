@@ -10,7 +10,9 @@ This repository contains a stateless API and Apps which are served via Nginx rev
 Following command will pull all the necessary images and setup the project up and running in dettached mode.
 
 `docker-compose build`<br/>
-`docker-compose up -d`
+`docker-compose up -d`<br/>
+
+(Note: You might need to wait till all services are up and running!)
 
 ##### Documentation #####
 
@@ -19,6 +21,8 @@ Following command will pull all the necessary images and setup the project up an
 ##### Assumptions/Limitations #####
 
 * Driver can pickup multiple customers at a time
+* Driver null value sanity has not been done. Need to add driver name
+  in order to store it in localstorage and perform proper API calls.
 * Driver triggers dropoff of the customer which is simulated using
   `setTimeout` function. If page is reloaded then it gets cleared
   and trip will never get completed.
