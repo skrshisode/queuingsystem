@@ -118,7 +118,7 @@
               if(status === 'waiting') {
                 setTimeout(function() {
                   updateTrip(requestId, 'dropoff', 'ongoing');
-                }, 5 * 60 * 1000); // After 5 min trip ends
+                }, 10 * 1000); // After 10 sec trip ends
               }
             }
           });
