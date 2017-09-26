@@ -33,26 +33,39 @@ const tripsCtrl = {
       });
   },
   listAll(req, res) {
+    const driverId = req.swagger.params.driverId.value;
+    const status = req.swagger.params.status.value;
+
     const size = req.swagger.params.size.value;
     const page = (req.swagger.params.page.value - 1) * size;
 
-    Trip.find()
-      .select({
-        'deletedOn': 0,
-        '_id': 0,
-      })
-      .sort({'createdOn': -1})
-      .limit(size)
-      .skip(page)
-      .exec()
-      .then((trips) => {
-        return res.status(200).json({
-          'data': trips,
-        });
+    let query = {};
+    if (status) {
+      query.status = status;
+    }
+
+    if (status !== 'waiting' && driverId) {
+      query.driverId = driverId;
+    }
+
+    Trip.find(query)
+    .select({
+      'deletedOn': 0,
+      '_id': 0,
+    })
+    .sort({'updatedOn': -1})
+    .limit(size)
+    .skip(page)
+    .exec()
+    .then((trips) => {
+      return res.status(200).json({
+        'data': trips,
       });
+    });
   },
   assign(req, res) {
     const requestId = req.swagger.params.requestId.value;
+    const driverId = req.swagger.params.driverId.value;
     const body = req.swagger.params.body.value;
 
     let query = {
@@ -63,7 +76,7 @@ const tripsCtrl = {
           updatedOn: Date.now(),
           status: 'ongoing',
           pickupOn: Date.now(),
-          driverId: body.driverId,
+          driverId: driverId,
         },
         options = {
           new: true,
@@ -74,7 +87,7 @@ const tripsCtrl = {
 
       // change the query to ensure only assigned driver is dropping the customer
       query.status = 'ongoing';
-      query.driverId = body.driverId;
+      query.driverId = driverId;
 
       // Only update the status
       update.status = 'completed';

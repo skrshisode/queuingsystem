@@ -1,4 +1,11 @@
 parameters:
+  driverId: {name: driverId, in: header, type: string, description: Driver id}
+  status:
+    name: status
+    in: query
+    type: string
+    enum: [waiting, ongoing, completed]
+    description: Trip/Request status
   page: {name: page, in: query, type: integer, description: Page number of the results,
     minimum: 1, default: 1}
   size: {name: size, in: query, type: integer, description: Number of documents to
@@ -12,6 +19,8 @@ paths:
       description: Returns trips data for dashboard
       operationId: listAll
       parameters:
+      - {$ref: '#/parameters/driverId'}
+      - {$ref: '#/parameters/status'}
       - {$ref: '#/parameters/page'}
       - {$ref: '#/parameters/size'}
       responses:
@@ -46,6 +55,7 @@ paths:
       description: API to assign the trip/request to the driver
       operationId: assign
       parameters:
+      - {$ref: '#/parameters/driverId'}
       - {in: path, name: requestId, type: string, required: true, description: Request
           id}
       - name: body
@@ -97,9 +107,8 @@ definitions:
     properties:
       customerId: {type: string, description: Customer Id}
   TripAssignment:
-    required: [driverId]
+    required: [action]
     properties:
-      driverId: {type: string, description: Driver Id}
       action:
         type: string
         enum: [pickup, dropoff]

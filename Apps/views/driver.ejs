@@ -13,25 +13,34 @@
     <p>Welcome to <%= title %> App</p>
 
     <div class="app">
+      <h3 style="text-align: center">Current driver: <span class="driver-name"></span></h3>
+      <form class="form-horizontal" id="request">
+        <div class="form-group">
+          <label class="control-label col-sm-2" for="driver">Driver:</label>
+          <div class="col-sm-10">
+            <input type="text" class="form-control" id="driver" placeholder="Enter name">
+          </div>
+        </div>
+        <div class="form-group">
+          <div class="col-sm-offset-2 col-sm-10">
+            <button type="submit" class="btn btn-default">Submit</button>
+          </div>
+        </div>
+        <p id="response"></p>
+      </form>
       <table class="table" id="table">
         <thead>
             <tr>
                 <th>waiting</th>
                 <th>ongoing</th>
-                <th>complete</th>
+                <th>completed</th>
             </tr>
         </thead>
         <tbody>
           <tr>
-              <td id="waiting">
-
-              </td>
-              <td id="ongoing">
-                <p>dsvcdsvsdv</p>
-              </td>
-              <td id="complete">
-                <p>dsvcdsvsdv</p>
-              </td>
+              <td id="waiting"></td>
+              <td id="ongoing"></td>
+              <td id="completed"></td>
           </tr>
         </tbody>
       </table>
@@ -43,16 +52,87 @@
     <script src="/socket.io/socket.io.js"></script>
     <script type="text/javascript">
       (function() {
+        $('.driver-name').text(localStorage.getItem("driver"));
+
+        $( "#request" ).submit(function(e){
+          e.preventDefault();
+          localStorage.setItem("driver", $('#driver').val());
+          $('.driver-name').text(localStorage.getItem("driver"));
+          getList('ongoing');
+          getList('completed');
+        });
+
+        function getList(status) {
+          $.ajax({
+            url: '<%= baseUrl %>/api/v0/trips/?status='+status,
+            type: "GET",
+            beforeSend: function(req) {
+               req.setRequestHeader("driverId", localStorage.getItem("driver"));
+            },
+            cache: false,
+            data: {
+              'from': 1,
+              'size': 10
+            },
+            success: function(result){
+              $('#' + status).html('');
+              for (var i = 0; i < result.data.length; i++) {
+                  var row = '';
+                  for (var key in result.data[i]) {
+                    if (result.data[i].hasOwnProperty(key)) {
+                      row += '<div class="tripItem">' + result.data[i][key] + '</div>';
+                    }
+                  }
+                  var button = status === 'waiting' ? '<button type="button" class="btn btn-assign btn-default">Submit</button>' : ''
+                  $('#' + status).append(
+                    $("<div class='trip " + result.data[i]['status'] + "' id='" + result.data[i]['requestId'] + "'>" + row +
+                    '<input type="hidden" name="requestId" class="assign-value" value="' +
+                    result.data[i]['requestId'] + '">' + button + "</div>")
+                  );
+              }
+            }
+          });
+        }
+
+        getList('waiting');
+        getList('ongoing');
+        getList('completed');
+
+        function updateTrip(requestId, action, status) {
+          console.log(requestId, action, status);
+          $.ajax({
+            url: '<%= baseUrl %>/api/v0/trips/'+requestId,
+            type: "PUT",
+            beforeSend: function(req) {
+               req.setRequestHeader("driverId", localStorage.getItem("driver"));
+            },
+            data: JSON.stringify({
+              'action': action,
+            }),
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function(result){
+              console.log(result);
+              var element = document.getElementsByClassName(status)[requestId];
+              element.parentNode.removeChild(element)
+              if(status === 'waiting') {
+                setTimeout(function() {
+                  updateTrip(requestId, 'dropoff', 'ongoing');
+                }, 5 * 60 * 1000); // After 5 min trip ends
+              }
+            }
+          });
+        }
+
+        $(document).on('click', '.btn-assign', function() {
+          var tripItem = $(this);
+          var requestId = $(this).siblings('.assign-value').val();
+          updateTrip(requestId, 'pickup', 'waiting');
+        })
+
         var socket = io({transports: ['websocket']});
         socket.on('trips', function(data){
-          console.log(data);
-          var json = JSON.parse(data);
-          $('#'+json.status).append(
-            '<p>' + new Date(json.createdOn) + '</p>' +
-            '<p>' + json.requestId + '</p>' +
-            '<p>' + json.customerId + '</p>' +
-            '<p>' + json.status + '</p>'
-          );
+          getList(data.status);
         });
       })();
     </script>

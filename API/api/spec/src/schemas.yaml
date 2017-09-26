@@ -40,11 +40,8 @@ definitions:
         description: Customer Id
   TripAssignment:
     required:
-      - driverId
+      - action
     properties:
-      driverId:
-        type: string
-        description: Driver Id
       action:
         type: string
         enum:

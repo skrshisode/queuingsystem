@@ -1,5 +1,22 @@
 {
   "parameters": {
+    "driverId": {
+      "name": "driverId",
+      "in": "header",
+      "type": "string",
+      "description": "Driver id"
+    },
+    "status": {
+      "name": "status",
+      "in": "query",
+      "type": "string",
+      "enum": [
+        "waiting",
+        "ongoing",
+        "completed"
+      ],
+      "description": "Trip/Request status"
+    },
     "page": {
       "name": "page",
       "in": "query",
@@ -29,6 +46,12 @@
         "description": "Returns trips data for dashboard",
         "operationId": "listAll",
         "parameters": [
+          {
+            "$ref": "#/parameters/driverId"
+          },
+          {
+            "$ref": "#/parameters/status"
+          },
           {
             "$ref": "#/parameters/page"
           },
@@ -94,6 +117,9 @@
         "description": "API to assign the trip/request to the driver",
         "operationId": "assign",
         "parameters": [
+          {
+            "$ref": "#/parameters/driverId"
+          },
           {
             "in": "path",
             "name": "requestId",
@@ -227,13 +253,9 @@
     },
     "TripAssignment": {
       "required": [
-        "driverId"
+        "action"
       ],
       "properties": {
-        "driverId": {
-          "type": "string",
-          "description": "Driver Id"
-        },
         "action": {
           "type": "string",
           "enum": [

@@ -47,8 +47,9 @@ else {
     const io = require('socket.io')(server);
     io.on('connection', (socket) => {
       broker.consumer.on('trips', (message) => {
-        console.log('Emitting ->', message);
-        socket.emit('trips', message);
+        const json = JSON.parse(message);
+        console.log('Emitting ->', json.status);
+        socket.emit('trips', {status: json.status});
       });
     });
 

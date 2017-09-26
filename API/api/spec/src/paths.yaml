@@ -11,6 +11,9 @@ paths:
       operationId: listAll
       parameters:
         # Meta
+        - $ref: "#/parameters/driverId"
+        - $ref: "#/parameters/status"
+        # Pagination
         - $ref: "#/parameters/page"
         - $ref: "#/parameters/size"
       responses:
@@ -60,6 +63,8 @@ paths:
       # used as the method name of the controller
       operationId: assign
       parameters:
+        # Meta
+        - $ref: "#/parameters/driverId"
         # Path
         - in: path
           name: requestId

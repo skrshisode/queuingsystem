@@ -29,7 +29,8 @@ services:
     build: './Apps'
     environment:
       - SERVICE_NAME=apps
-      - SERVICE_TAGS=production
+      - NODE_ENV=production
+      - RABBITMQ_HOST=rabbitmq
     expose:
     - "3000"
     restart: "on-failure:3"
@@ -56,4 +57,4 @@ services:
     restart: "on-failure:3"
     links:
       - api
-      - app
+      - apps

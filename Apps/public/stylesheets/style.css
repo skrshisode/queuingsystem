@@ -12,3 +12,20 @@ a {
   padding: 2.5%;
   margin: auto;
 }
+
+#table th{
+  text-align: center;
+}
+
+#waiting, #ongoing, #completed{
+  width: 30%;
+}
+
+.trip{
+  border-bottom: 1px solid #ccc;
+  padding: 5px
+}
+
+.tripItem{
+  height: 20px;
+}

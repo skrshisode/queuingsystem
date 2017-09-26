@@ -1,4 +1,19 @@
 parameters:
+  # Meta parameters
+  driverId:
+    name: driverId
+    in: header
+    type: string
+    description: Driver id
+  status:
+    name: status
+    in: query
+    type: string
+    enum:
+      - waiting
+      - ongoing
+      - completed
+    description: Trip/Request status
   # Pagination parameters
   page:
     name: page
