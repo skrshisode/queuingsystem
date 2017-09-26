@@ -25,6 +25,7 @@ Following command will pull all the necessary images and setup the project up an
   in order to store it in localstorage and perform proper API calls.
 * Driver triggers dropoff of the customer which is simulated using
   `setTimeout` function. If page is reloaded then it gets cleared
-  and trip will never get completed.
+  and trip will again take specified time to complete.
+  (Note: Instead of 5 min, have set it for 10 sec.)
 * UI is not clean.
 * More... at the time of demo!

@@ -77,17 +77,25 @@
             success: function(result){
               $('#' + status).html('');
               for (var i = 0; i < result.data.length; i++) {
+                  var requestId = result.data[i]['requestId'];
+                  if(status === 'ongoing') {
+                    // Trigger this if page is reloaded
+                    setTimeout(function() {
+                      updateTrip(requestId, 'dropoff', 'ongoing');
+                    }, 10 * 1000); // After 10 sec trip ends
+                  }
+
                   var row = '';
                   for (var key in result.data[i]) {
                     if (result.data[i].hasOwnProperty(key)) {
-                      row += '<div class="tripItem">' + result.data[i][key] + '</div>';
+                      row += '<div class="tripItem"> <b>' + key + '</b>: ' + result.data[i][key] + '</div>';
                     }
                   }
                   var button = status === 'waiting' ? '<button type="button" class="btn btn-assign btn-default">Submit</button>' : ''
                   $('#' + status).append(
-                    $("<div class='trip " + result.data[i]['status'] + "' id='" + result.data[i]['requestId'] + "'>" + row +
+                    $("<div class='trip " + result.data[i]['status'] + "' id='" + requestId + "'>" + row +
                     '<input type="hidden" name="requestId" class="assign-value" value="' +
-                    result.data[i]['requestId'] + '">' + button + "</div>")
+                    requestId + '">' + button + "</div>")
                   );
               }
             }
