@@ -12,7 +12,12 @@ Following command will pull all the necessary images and setup the project up an
 `docker-compose build`<br/>
 `docker-compose up -d`<br/>
 
-(Note: You might need to wait till all services are up and running!)
+Note:
+* You might need to wait till all services are up and running!
+* Make sure nothing is running on port 80 of your system.
+  Otherwise it will conflict with Nginx container.
+
+Now open browser and type `localhost`.
 
 ##### Documentation #####
 
