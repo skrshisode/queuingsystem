@@ -11,7 +11,7 @@
     "amqplib": "^0.5.1",
     "bluebird": "^3.5.0",
     "config": "^1.25.1",
-    "express": "^4.15.2",
+    "express": "^4.18.2",
     "helmet": "^3.8.1",
     "meanie-mongoose-only-id": "^1.0.1",
     "meanie-mongoose-set-properties": "^2.0.4",
@@ -26,7 +26,7 @@
   },
   "devDependencies": {
     "should": "^7.1.0",
-    "supertest": "^1.0.0",
+    "supertest": "^6.3.2",
     "extendify": "^1.0.0",
     "glob-all": "^3.1.0",
     "nodemon": "^1.12.1",
