@@ -26,7 +26,7 @@
   },
   "devDependencies": {
     "should": "^7.1.0",
-    "supertest": "^1.0.0",
+    "supertest": "^6.3.3",
     "extendify": "^1.0.0",
     "glob-all": "^3.1.0",
     "nodemon": "^1.12.1",
