@@ -28,7 +28,7 @@
     "should": "^7.1.0",
     "supertest": "^1.0.0",
     "extendify": "^1.0.0",
-    "glob-all": "^3.1.0",
+    "glob-all": "^3.3.1",
     "nodemon": "^1.12.1",
     "yaml-js": "^0.1.4"
   },
